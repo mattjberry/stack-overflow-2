@@ -7,6 +7,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    env_file:
+      - .env.example
     environment:
       NODE_ENV: development
       DATABASE_URL: postgresql://admin:admin@postgres:5432/proj
@@ -22,6 +24,8 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./db/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./db/02_seed.sql:/docker-entrypoint-initdb.d/02_seed.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d proj"]
       timeout: 5s
