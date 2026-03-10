@@ -55,3 +55,21 @@ CREATE TABLE attachments (
   size_bytes INTEGER NOT NULL,
   file_path TEXT NOT NULL
 );
+
+-- Foreign keys
+CREATE INDEX ON posts(channel_id);
+CREATE INDEX ON posts(author_id);
+CREATE INDEX ON replies(post_id);
+CREATE INDEX ON replies(parent_reply_id);
+CREATE INDEX ON replies(author_id);
+CREATE INDEX ON votes(user_id);
+CREATE INDEX ON votes(target_type, target_id);
+CREATE INDEX ON attachments(target_type, target_id);
+
+-- Search fields
+CREATE INDEX ON posts(title);
+CREATE INDEX ON users(display_name);
+-- replace with the following for part 4
+-- Enables fast ILIKE '%keyword%' searches
+--CREATE INDEX ON posts USING gin(to_tsvector('english', title || ' ' || body));
+--CREATE INDEX ON replies USING gin(to_tsvector('english', body));
